@@ -74,7 +74,7 @@ init_state()
 st.title("Sondre Ørjasæter")
 st.caption(
     "Open the boxes to find the GOAT "
-    "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
+    "made specially for number 1 Sondre Ørjasæter fan TM"
 )
 
 with st.sidebar:
