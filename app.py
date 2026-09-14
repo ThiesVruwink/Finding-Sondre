@@ -76,8 +76,7 @@ def new_game():
 init_state()
 
 st.title("Sondre Ørjasæter")
-st.caption("Open boxes to find superstar winger Sondre Ørjasæter, lose when
-generational loser Jakob Trenskow is found"
+st.caption("Open boxes to find superstar winger Sondre Ørjasæter, lose when generational loser Jakob Trenskow is found"
 )
 
 with st.sidebar:
