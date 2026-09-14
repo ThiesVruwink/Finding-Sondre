@@ -78,7 +78,7 @@ init_state()
 st.title("Sondre Ørjasæter")
 st.caption(
     "Open the boxes to find the GOAT "
-    "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
+    "made specially for number 1 Sondre Ørjasæter fan TM"
 )
 
 with st.sidebar:
@@ -240,7 +240,7 @@ if st.session_state.game_over:
         st.success("🎉 You cleared every safe box! You win!")
         st.balloons()
     else:
-        st.error(" You touched the angry one! Game over.")
+        st.error(" You touched the loser! Game over.")
 
     if st.button("Play Again", use_container_width=True):
         new_game()
