@@ -60,7 +60,8 @@ init_state()
 
 st.title("Sondre Ørjasæter")
 st.caption(
-    "Made by number 1 fan Tom Mollema"
+    "Made by number 1 Sondre Ørjasæter fan Tom Mollema"
+    
 )
 
 with st.sidebar:
@@ -130,7 +131,7 @@ for _ in range(rows):
                 st.image(tile["image"], use_container_width=True)
 
                 if tile["type"] == "loser":
-                    st.error("💥 Angry! You found the loser.")
+                    st.error(" Angry! You found the loser.")
                 else:
                     st.caption("✅ Safe!")
 
@@ -171,7 +172,7 @@ if st.session_state.game_over:
         st.success("🎉 You cleared every safe box! You win!")
         st.balloons()
     else:
-        st.error("💥 You touched the angry one! Game over.")
+        st.error(" You touched the angry one! Game over.")
 
     if st.button("Play Again", use_container_width=True):
         new_game()
