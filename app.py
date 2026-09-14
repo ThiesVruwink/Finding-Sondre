@@ -6,9 +6,9 @@ import streamlit as st
 st.set_page_config(page_title="Box Game", page_icon="📦", layout="wide")
 
 BASE_DIR = Path(__file__).parent
-BASE_EMOJI = BASE_DIR / "images" / "base_emoji.webp"
-SAFE_REVEAL = BASE_DIR / "images" / "safe_reveal.jpg"
-LOSE_REVEAL = BASE_DIR / "images" / "lose_reveal.jpg"
+BASE_EMOJI = BASE_DIR / "base_emoji.webp"
+SAFE_REVEAL = BASE_DIR / "safe_reveal.jpg"
+LOSE_REVEAL = BASE_DIR /  "lose_reveal.jpg"
 
 
 def init_state():
