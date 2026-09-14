@@ -60,8 +60,8 @@ init_state()
 
 st.title("Sondre Ørjasæter")
 st.caption(
-    "Open the boxes to find the GOAT.
-    Made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
+    "Open the boxes to find the GOAT"
+    "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
     
 )
 
