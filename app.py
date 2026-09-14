@@ -78,7 +78,7 @@ init_state()
 st.title("Sondre Ørjasæter")
 st.caption(
     "Open the boxes to find the GOAT "
-    "specially made for number 1 Sondre Ørjasæter fan TM"
+    "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
 )
 
 with st.sidebar:
@@ -128,14 +128,28 @@ with st.sidebar:
     ):
         new_game()
 
-# Prepare base emoji data URI
+# Base emoji data URI
 base_emoji_b64 = get_base64_image(BASE_EMOJI)
 
-# Responsive mobile-friendly CSS
+# Force multi-column layout on mobile and prevent vertical stacking
 st.markdown(
     f"""
     <style>
-    /* Default / Desktop button styling */
+    /* Prevent Streamlit from collapsing columns into a single vertical stack on mobile */
+    div[data-testid="stHorizontalBlock"] {{
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+    }}
+
+    div[data-testid="stColumn"] {{
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }}
+
+    /* Button base styles */
     div[data-testid="stColumn"] button {{
         background-image: url("{base_emoji_b64}") !important;
         background-size: contain !important;
@@ -147,14 +161,17 @@ st.markdown(
         width: 100% !important;
         min-width: 0px !important;
         padding: 0 !important;
-        transition: transform 0.1s ease;
     }}
+
     div[data-testid="stColumn"] button:hover {{
         transform: scale(1.03);
     }}
+
     div[data-testid="stColumn"] button p {{
         display: none !important;
     }}
+
+    /* Image base styles */
     div[data-testid="stColumn"] img {{
         border-radius: 8px !important;
         height: 110px !important;
@@ -162,18 +179,23 @@ st.markdown(
         width: 100% !important;
     }}
 
-    /* Mobile adjustments */
+    /* Mobile screens: adjust heights so square ratio holds without overflowing */
     @media (max-width: 768px) {{
         div[data-testid="stHorizontalBlock"] {{
-            gap: 0.35rem !important;
+            gap: 6px !important;
+            margin-bottom: 6px !important;
         }}
         div[data-testid="stColumn"] button {{
-            height: 75px !important;
+            height: 76px !important;
             border-radius: 6px !important;
         }}
         div[data-testid="stColumn"] img {{
-            height: 75px !important;
+            height: 76px !important;
             border-radius: 6px !important;
+        }}
+        div[data-testid="stColumn"] div[data-testid="stCaptionContainer"] p {{
+            font-size: 0.75rem !important;
+            text-align: center !important;
         }}
     }}
     </style>
@@ -183,7 +205,7 @@ st.markdown(
 
 board = st.session_state.board
 
-# 4 columns ensures touch-friendly box sizes on mobile screens
+# 4 columns creates a clean grid across mobile and desktop
 cols_per_row = 4
 rows = (len(board) + cols_per_row - 1) // cols_per_row
 
@@ -240,7 +262,7 @@ if st.session_state.game_over:
         st.success("🎉 You cleared every safe box! You win!")
         st.balloons()
     else:
-        st.error(" You touched the loser! Game over.")
+        st.error(" You touched the angry one! Game over.")
 
     if st.button("Play Again", use_container_width=True):
         new_game()
