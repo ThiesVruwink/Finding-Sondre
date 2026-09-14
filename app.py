@@ -3,7 +3,11 @@ from pathlib import Path
 import random
 import streamlit as st
 
-st.set_page_config(page_title="Sondre Ørjasæter game", layout="wide")
+st.set_page_config(
+    page_title="Sondre Ørjasæter game",
+    layout="centered",
+    initial_sidebar_state="collapsed",
+)
 
 BASE_DIR = Path(__file__).parent
 BASE_EMOJI = BASE_DIR / "base_emoji.webp"
@@ -74,7 +78,7 @@ init_state()
 st.title("Sondre Ørjasæter")
 st.caption(
     "Open the boxes to find the GOAT "
-    "made specially for number 1 Sondre Ørjasæter fan TM"
+    "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
 )
 
 with st.sidebar:
@@ -124,29 +128,53 @@ with st.sidebar:
     ):
         new_game()
 
-# Prepare base emoji data URI once
+# Prepare base emoji data URI
 base_emoji_b64 = get_base64_image(BASE_EMOJI)
 
-# Inject CSS to make Streamlit buttons display the emoji directly
+# Responsive mobile-friendly CSS
 st.markdown(
     f"""
     <style>
-    div[data-testid="stColumn"] button.emoji-btn {{
+    /* Default / Desktop button styling */
+    div[data-testid="stColumn"] button {{
         background-image: url("{base_emoji_b64}") !important;
         background-size: contain !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
         border: 1px solid #444 !important;
         border-radius: 8px !important;
-        height: 120px !important;
+        height: 110px !important;
         width: 100% !important;
+        min-width: 0px !important;
+        padding: 0 !important;
         transition: transform 0.1s ease;
     }}
-    div[data-testid="stColumn"] button.emoji-btn:hover {{
-        transform: scale(1.04);
+    div[data-testid="stColumn"] button:hover {{
+        transform: scale(1.03);
     }}
-    div[data-testid="stColumn"] button.emoji-btn p {{
+    div[data-testid="stColumn"] button p {{
         display: none !important;
+    }}
+    div[data-testid="stColumn"] img {{
+        border-radius: 8px !important;
+        height: 110px !important;
+        object-fit: cover !important;
+        width: 100% !important;
+    }}
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {{
+        div[data-testid="stHorizontalBlock"] {{
+            gap: 0.35rem !important;
+        }}
+        div[data-testid="stColumn"] button {{
+            height: 75px !important;
+            border-radius: 6px !important;
+        }}
+        div[data-testid="stColumn"] img {{
+            height: 75px !important;
+            border-radius: 6px !important;
+        }}
     }}
     </style>
     """,
@@ -155,7 +183,8 @@ st.markdown(
 
 board = st.session_state.board
 
-cols_per_row = 6
+# 4 columns ensures touch-friendly box sizes on mobile screens
+cols_per_row = 4
 rows = (len(board) + cols_per_row - 1) // cols_per_row
 
 idx = 0
@@ -178,21 +207,12 @@ for _ in range(rows):
                     st.caption("✅ Safe!")
 
             else:
-                # Button styled as the emoji via custom class
                 clicked = st.button(
                     label=" ",
                     key=f"tile_{idx}",
                     disabled=st.session_state.game_over,
                     use_container_width=True,
                     help="Click to reveal",
-                )
-                
-                # Tag the button with the custom CSS class
-                st.markdown(
-                    f"""<script>
-                    var btns = window.parent.document.querySelectorAll('button[kind="secondary"]');
-                    </script>""",
-                    unsafe_allow_html=True,
                 )
 
                 if clicked:
@@ -232,4 +252,3 @@ else:
         if t["type"] == "safe" and not t["revealed"]
     )
     st.info(f"Boxes left to safely reveal: {remaining_safe}")
-    
