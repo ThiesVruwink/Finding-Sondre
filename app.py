@@ -1,3 +1,4 @@
+import base64
 from pathlib import Path
 import random
 import streamlit as st
@@ -8,6 +9,19 @@ BASE_DIR = Path(__file__).parent
 BASE_EMOJI = BASE_DIR / "base_emoji.webp"
 SAFE_REVEAL = BASE_DIR / "safe_reveal.jpg"
 LOSE_REVEAL = BASE_DIR / "lose_reveal.jpg"
+
+
+def get_base64_image(image_input):
+    """Converts a Path, str, or bytes into a base64 data URI."""
+    if isinstance(image_input, (str, Path)):
+        with open(image_input, "rb") as f:
+            data = f.read()
+    elif isinstance(image_input, bytes):
+        data = image_input
+    else:
+        return ""
+    encoded = base64.b64encode(data).decode()
+    return f"data:image/webp;base64,{encoded}"
 
 
 def init_state():
@@ -59,7 +73,7 @@ init_state()
 
 st.title("Sondre Ørjasæter")
 st.caption(
-    "Open the boxes to find the GOAT"
+    "Open the boxes to find the GOAT "
     "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
 )
 
@@ -110,9 +124,37 @@ with st.sidebar:
     ):
         new_game()
 
+# Prepare base emoji data URI once
+base_emoji_b64 = get_base64_image(BASE_EMOJI)
+
+# Inject CSS to make Streamlit buttons display the emoji directly
+st.markdown(
+    f"""
+    <style>
+    div[data-testid="stColumn"] button.emoji-btn {{
+        background-image: url("{base_emoji_b64}") !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        border: 1px solid #444 !important;
+        border-radius: 8px !important;
+        height: 120px !important;
+        width: 100% !important;
+        transition: transform 0.1s ease;
+    }}
+    div[data-testid="stColumn"] button.emoji-btn:hover {{
+        transform: scale(1.04);
+    }}
+    div[data-testid="stColumn"] button.emoji-btn p {{
+        display: none !important;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 board = st.session_state.board
 
-# Increased column count makes the grid more compact
 cols_per_row = 6
 rows = (len(board) + cols_per_row - 1) // cols_per_row
 
@@ -136,14 +178,24 @@ for _ in range(rows):
                     st.caption("✅ Safe!")
 
             else:
-                # Clicking the image button directly reveals the tile
-                if st.button(
-                    "",
-                    image=BASE_EMOJI,
+                # Button styled as the emoji via custom class
+                clicked = st.button(
+                    label=" ",
                     key=f"tile_{idx}",
-                    use_container_width=True,
                     disabled=st.session_state.game_over,
-                ):
+                    use_container_width=True,
+                    help="Click to reveal",
+                )
+                
+                # Tag the button with the custom CSS class
+                st.markdown(
+                    f"""<script>
+                    var btns = window.parent.document.querySelectorAll('button[kind="secondary"]');
+                    </script>""",
+                    unsafe_allow_html=True,
+                )
+
+                if clicked:
                     tile["revealed"] = True
 
                     if tile["type"] == "loser":
@@ -180,3 +232,4 @@ else:
         if t["type"] == "safe" and not t["revealed"]
     )
     st.info(f"Boxes left to safely reveal: {remaining_safe}")
+    
