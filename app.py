@@ -1,6 +1,5 @@
-import random
 from pathlib import Path
-
+import random
 import streamlit as st
 
 st.set_page_config(page_title="Sondre Ørjasæter game", layout="wide")
@@ -8,7 +7,7 @@ st.set_page_config(page_title="Sondre Ørjasæter game", layout="wide")
 BASE_DIR = Path(__file__).parent
 BASE_EMOJI = BASE_DIR / "base_emoji.webp"
 SAFE_REVEAL = BASE_DIR / "safe_reveal.jpg"
-LOSE_REVEAL = BASE_DIR /  "lose_reveal.jpg"
+LOSE_REVEAL = BASE_DIR / "lose_reveal.jpg"
 
 
 def init_state():
@@ -62,7 +61,6 @@ st.title("Sondre Ørjasæter")
 st.caption(
     "Open the boxes to find the GOAT"
     "made specially for number 1 Sondre Ørjasæter fan Tom Mollema"
-    
 )
 
 with st.sidebar:
@@ -114,7 +112,8 @@ with st.sidebar:
 
 board = st.session_state.board
 
-cols_per_row = 4
+# Increased column count makes the grid more compact
+cols_per_row = 6
 rows = (len(board) + cols_per_row - 1) // cols_per_row
 
 idx = 0
@@ -137,14 +136,10 @@ for _ in range(rows):
                     st.caption("✅ Safe!")
 
             else:
-                # Your uploaded transparent player image is the "closed box emoji".
-                st.image(
-                    BASE_EMOJI,
-                    use_container_width=True,
-                )
-
+                # Clicking the image button directly reveals the tile
                 if st.button(
-                    "Open",
+                    "",
+                    image=BASE_EMOJI,
                     key=f"tile_{idx}",
                     use_container_width=True,
                     disabled=st.session_state.game_over,
