@@ -60,6 +60,7 @@ init_state()
 
 st.title("Sondre Ørjasæter")
 st.caption(
+    "Open the boxes to find the GOAT"
     "Made by number 1 Sondre Ørjasæter fan Tom Mollema"
     
 )
@@ -131,7 +132,7 @@ for _ in range(rows):
                 st.image(tile["image"], use_container_width=True)
 
                 if tile["type"] == "loser":
-                    st.error(" Angry! You found the loser.")
+                    st.error("You found the loser.")
                 else:
                     st.caption("✅ Safe!")
 
