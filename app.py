@@ -13,12 +13,16 @@ BASE_DIR = Path(__file__).parent
 BASE_EMOJI = BASE_DIR / "base_emoji.webp"
 SAFE_REVEAL = BASE_DIR / "safe_reveal.jpg"
 LOSE_REVEAL = BASE_DIR / "lose_reveal.jpg"
+WIN_REVEAL = BASE_DIR / "ballon_dor.png"
 
 
 def get_base64_image(image_input):
     """Converts a Path, str, or bytes into a base64 data URI."""
     if isinstance(image_input, (str, Path)):
-        with open(image_input, "rb") as f:
+        p = Path(image_input)
+        if not p.exists():
+            return ""
+        with open(p, "rb") as f:
             data = f.read()
     elif isinstance(image_input, bytes):
         data = image_input
@@ -32,6 +36,7 @@ def init_state():
     defaults = {
         "images_safe": [SAFE_REVEAL],
         "image_loser": LOSE_REVEAL,
+        "image_winner": WIN_REVEAL,
         "board": None,
         "game_over": False,
         "won": False,
@@ -100,6 +105,13 @@ with st.sidebar:
         key="loser_uploader",
     )
 
+    winner_upload = st.file_uploader(
+        "Nieuwe Ballon d'Or Win-foto",
+        type=["png", "jpg", "jpeg", "gif", "webp"],
+        accept_multiple_files=False,
+        key="winner_uploader",
+    )
+
     num_tiles = st.slider(
         "Number of boxes",
         min_value=6,
@@ -115,6 +127,9 @@ with st.sidebar:
 
     if loser_upload:
         st.session_state.image_loser = loser_upload.getvalue()
+
+    if winner_upload:
+        st.session_state.image_winner = winner_upload.getvalue()
 
     settings_changed = num_tiles != st.session_state.num_tiles
     st.session_state.num_tiles = num_tiles
@@ -203,7 +218,6 @@ st.markdown(
 
 board = st.session_state.board
 
-# 4 columns creates a clean grid across mobile and desktop
 cols_per_row = 4
 rows = (len(board) + cols_per_row - 1) // cols_per_row
 
@@ -257,10 +271,18 @@ st.divider()
 
 if st.session_state.game_over:
     if st.session_state.won:
-        st.success("🎉 You cleared every safe box! You win!")
+        st.success("🎉 You cleared every safe box! Sondre wins the Ballon d'Or!")
+        
+        # Display victory image
+        win_img = st.session_state.image_winner
+        if isinstance(win_img, Path) and win_img.exists():
+            st.image(win_img, caption="🏆 Ballon d'Or Winner!", use_container_width=True)
+        elif isinstance(win_img, bytes):
+            st.image(win_img, caption="🏆 Ballon d'Or Winner!", use_container_width=True)
+            
         st.balloons()
     else:
-        st.error(" You found the loser! Game over.")
+        st.error(" You touched the angry one! Game over.")
 
     if st.button("Play Again", use_container_width=True):
         new_game()
