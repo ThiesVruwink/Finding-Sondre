@@ -3,7 +3,7 @@ from pathlib import Path
 
 import streamlit as st
 
-st.set_page_config(page_title="Box Game", page_icon="📦", layout="wide")
+st.set_page_config(page_title="Sondre Ørjasæter game", layout="wide")
 
 BASE_DIR = Path(__file__).parent
 BASE_EMOJI = BASE_DIR / "base_emoji.webp"
@@ -58,9 +58,9 @@ def new_game():
 
 init_state()
 
-st.title("📦 The Box Game")
+st.title("Sondre Ørjasæter")
 st.caption(
-    "Tap the boxes one by one. Reveal them all without touching the angry one!"
+    "Made by number 1 fan Tom Mollema"
 )
 
 with st.sidebar:
