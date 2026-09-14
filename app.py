@@ -282,7 +282,7 @@ if st.session_state.game_over:
             
         st.balloons()
     else:
-        st.error(" You touched the angry one! Game over.")
+        st.error(" You found the loser! Game over.")
 
     if st.button("Play Again", use_container_width=True):
         new_game()
